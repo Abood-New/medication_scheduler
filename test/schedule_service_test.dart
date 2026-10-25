@@ -113,9 +113,10 @@ void main() {
       });
 
       test('works for past dates', () {
-        final ref = AppDate(2026, 1, 10); // Saturday
+        final ref = AppDate(2026, 1, 10); // Saturday (TAKE)
+        // Jan 8 (Thursday) is a TAKE day (diff -2), so next dose from Jan 8 is Jan 8 itself
         final next = service.getNextDoseDate(referenceDate: ref, fromDate: AppDate(2026, 1, 8));
-        expect(next, equals(AppDate(2026, 1, 9))); // Friday
+        expect(next, equals(AppDate(2026, 1, 8))); // Thursday (TAKE day)
       });
     });
 
