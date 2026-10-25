@@ -1,0 +1,53 @@
+# Flutter/Dart/Pub
+**/dart_tool/
+**/.dart_tool/
+**/build/
+**/.packages
+**/.pub-cache/
+**/pubspec.lock
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Flutter
+flutter_*.png
+*.dart_tool_package_config.json
+
+# Generated files
+**/*.g.dart
+**/*.freezed.dart
+**/*.config.dart
+**/generated_plugin_registrant.dart
+
+# Build outputs
+build/
+dart_tool/
+.packages
+
+# Hive generated adapters (if using build_runner)
+lib/**/*.g.dart
+
+# Coverage
+coverage/
+*.lcov
+
+# Local environment
+.env
+.env.local
+
+# Firebase (if added later)
+firebase.json
+.firebase/
+
+# Web specific (for GitHub Pages)
+web/index.html
+# Note: Keep web/ folder but ignore generated build output
