@@ -19,6 +19,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,30 +29,26 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0'
-          channel: 'stable'
+          flutter-version: "3.22.0"
+          channel: "stable"
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
-        working-directory: ./medication_scheduler
 
       - name: Generate Hive adapters
         run: dart run build_runner build --delete-conflicting-outputs
-        working-directory: ./medication_scheduler
 
       - name: Run tests
         run: flutter test
-        working-directory: ./medication_scheduler
 
       - name: Build Flutter Web
-        run: flutter build web --release --base-href "/medication-scheduler/"
-        working-directory: ./medication_scheduler
+        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./medication_scheduler/build/web
+          path: ./build/web
 
   deploy:
     needs: build
