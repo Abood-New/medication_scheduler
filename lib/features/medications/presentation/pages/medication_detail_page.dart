@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:medication_scheduler/core/date/date_utils.dart';
-import 'package:medication_scheduler/features/medications/domain/entities/medication.dart';
+import 'package:medication_scheduler/features/medications/domain/entities/medication.dart' as med_entity;
 import 'package:medication_scheduler/features/medications/presentation/providers/medication_provider.dart';
 import 'package:medication_scheduler/features/medications/presentation/pages/medication_setup_page.dart';
 import 'package:medication_scheduler/features/schedule/domain/services/medication_schedule_service.dart';
 import 'package:medication_scheduler/core/services/notification_service.dart';
 
-class MedicationDetailPage extends StatefulWidget {
-  final Medication medication;
+class med_entity.MedicationDetailPage extends StatefulWidget {
+  final med_entity.Medication medication;
 
-  const MedicationDetailPage({super.key, required this.medication});
+  const med_entity.MedicationDetailPage({super.key, required this.medication});
 
   @override
-  State<MedicationDetailPage> createState() => _MedicationDetailPageState();
+  State<med_entity.MedicationDetailPage> createState() => _med_entity.MedicationDetailPageState();
 }
 
-class _MedicationDetailPageState extends State<MedicationDetailPage> {
-  late Medication _medication;
+class _med_entity.MedicationDetailPageState extends State<med_entity.MedicationDetailPage> {
+  late med_entity.Medication _medication;
   bool _reminderEnabled = false;
-  TimeOfDay? _reminderTime;
+  med_entity.TimeOfDay? _reminderTime;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Medication Info Card
+            // med_entity.Medication Info Card
             _buildInfoCard(context),
             const SizedBox(height: 16),
 
@@ -81,7 +81,7 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Medication Info',
+              'med_entity.Medication Info',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -138,7 +138,7 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
   }
 
   Widget _buildScheduleCard(BuildContext context) {
-    final scheduleService = const MedicationScheduleService();
+    final scheduleService = const med_entity.MedicationScheduleService();
     final upcoming = scheduleService.getUpcomingDoses(
       referenceDate: _medication.referenceDate,
       fromDate: AppDate.today(),
@@ -340,7 +340,7 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
             const SizedBox(height: 8),
             FilledButton.icon(
               icon: const Icon(Icons.delete_outline),
-              label: const Text('Delete Medication'),
+              label: const Text('Delete med_entity.Medication'),
               style: FilledButton.styleFrom(
                 backgroundColor: colorScheme.error,
                 foregroundColor: colorScheme.onError,
@@ -357,7 +357,7 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => MedicationSetupPage(),
+        builder: (_) => med_entity.MedicationSetupPage(),
       ),
     );
     // Reload medication after edit
@@ -378,30 +378,30 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
     final picked = await showTimePicker(
       context: context,
       initialTime: _reminderTime != null
-          ? TimeOfDay(hour: _reminderTime!.hour, minute: _reminderTime!.minute)
-          : TimeOfDay(hour: 9, minute: 0),
+          ? med_entity.TimeOfDay(hour: _reminderTime!.hour, minute: _reminderTime!.minute)
+          : med_entity.TimeOfDay(hour: 9, minute: 0),
     );
     if (picked != null) {
       setState(() {
-        _reminderTime = TimeOfDay(hour: picked.hour, minute: picked.minute);
+        _reminderTime = med_entity.TimeOfDay(hour: picked.hour, minute: picked.minute);
       });
       await _saveReminderSettings();
     }
   }
 
   Future<void> _saveReminderSettings() async {
-    final medProvider = context.read<MedicationProvider>();
+    final medProvider = context.read<med_entity.MedicationProvider>();
     final updated = _medication.copyWith(
       reminderEnabled: _reminderEnabled,
       reminderTime: _reminderTime,
     );
-    await medProvider.editMedication(updated);
+    await medProvider.editmed_entity.Medication(updated);
     _medication = updated;
 
     if (_reminderEnabled && _reminderTime != null) {
-      await NotificationService().scheduleMedicationNotifications(_medication);
+      await NotificationService().schedulemed_entity.MedicationNotifications(_medication);
     } else {
-      await NotificationService().cancelMedicationNotifications(_medication.id);
+      await NotificationService().cancelmed_entity.MedicationNotifications(_medication.id);
     }
   }
 
@@ -440,16 +440,16 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
     );
 
     if (picked != null && mounted) {
-      final medProvider = context.read<MedicationProvider>();
+      final medProvider = context.read<med_entity.MedicationProvider>();
       final updated = _medication.copyWith(
         referenceDate: AppDate.fromDateTime(picked),
       );
-      await medProvider.editMedication(updated);
+      await medProvider.editmed_entity.Medication(updated);
       _medication = updated;
 
       // Reschedule notifications
       if (_reminderEnabled && _reminderTime != null) {
-        await NotificationService().scheduleMedicationNotifications(_medication);
+        await NotificationService().schedulemed_entity.MedicationNotifications(_medication);
       }
 
       if (mounted) {
@@ -467,7 +467,7 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Medication?'),
+        title: const Text('Delete med_entity.Medication?'),
         content: Text(
           'Are you sure you want to delete "${_medication.name}"? This will also delete all history records and cannot be undone.',
         ),
@@ -486,9 +486,9 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
     );
 
     if (confirmed == true && mounted) {
-      final medProvider = context.read<MedicationProvider>();
-      await medProvider.removeMedication(_medication.id);
-      await NotificationService().cancelMedicationNotifications(_medication.id);
+      final medProvider = context.read<med_entity.MedicationProvider>();
+      await medProvider.removemed_entity.Medication(_medication.id);
+      await NotificationService().cancelmed_entity.MedicationNotifications(_medication.id);
       if (mounted) {
         Navigator.pop(context);
       }

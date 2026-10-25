@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:medication_scheduler/core/date/date_utils.dart';
-import 'package:medication_scheduler/features/medications/domain/entities/medication.dart';
+import 'package:medication_scheduler/features/medications/domain/entities/medication.dart' as med_entity;
 import 'package:medication_scheduler/features/medications/presentation/providers/medication_provider.dart';
 import 'package:medication_scheduler/features/schedule/domain/services/medication_schedule_service.dart';
 import 'package:medication_scheduler/core/constants/app_constants.dart';
@@ -24,7 +24,7 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
   int _currentStep = 0;
   AppDate _referenceDate = AppDate.today();
   bool _reminderEnabled = false;
-  TimeOfDay? _reminderTime;
+  med_entity.TimeOfDay? _reminderTime;
   List<AppDate> _previewDoses = [];
 
   final _scheduleService = const MedicationScheduleService();
@@ -340,12 +340,12 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
     final picked = await showTimePicker(
       context: context,
       initialTime: _reminderTime != null
-          ? TimeOfDay(hour: _reminderTime!.hour, minute: _reminderTime!.minute)
-          : TimeOfDay(hour: 9, minute: 0),
+          ? med_entity.TimeOfDay(hour: _reminderTime!.hour, minute: _reminderTime!.minute)
+          : med_entity.TimeOfDay(hour: 9, minute: 0),
     );
     if (picked != null) {
       setState(() {
-        _reminderTime = TimeOfDay(hour: picked.hour, minute: picked.minute);
+        _reminderTime = med_entity.TimeOfDay(hour: picked.hour, minute: picked.minute);
       });
     }
   }
@@ -371,11 +371,11 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
     final medProvider = context.read<MedicationProvider>();
     final settingsProvider = context.read<SettingsProvider>();
 
-    final medication = Medication.create(
+    final medication = med_entity.Medication.create(
       name: _nameController.text.trim(),
       dosage: _dosageController.text.trim().isEmpty ? null : _dosageController.text.trim(),
       notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
-      scheduleType: ScheduleType.EVERY_OTHER_DAY,
+      scheduleType: med_entity.ScheduleType.EVERY_OTHER_DAY,
       referenceDate: _referenceDate,
       reminderEnabled: _reminderEnabled,
       reminderTime: _reminderTime,

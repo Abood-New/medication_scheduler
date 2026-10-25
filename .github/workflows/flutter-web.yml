@@ -1,4 +1,4 @@
-name: Build and Deploy Flutter Web to GitHub Pages
+name: Build Flutter Android APK
 
 on:
   push:
@@ -9,19 +9,15 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: "android-build"
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,21 +38,12 @@ jobs:
       - name: Run tests
         run: flutter test
 
-      - name: Build Flutter Web
-        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+      - name: Build APK
+        run: flutter build apk --release
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
         with:
-          path: ./build/web
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          name: medication-app-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:medication_scheduler/core/date/date_utils.dart';
+import 'package:medication_scheduler/features/medications/domain/entities/medication.dart';
 import 'package:medication_scheduler/features/medications/presentation/providers/medication_provider.dart';
 import 'package:medication_scheduler/features/history/presentation/providers/history_provider.dart';
 import 'package:medication_scheduler/features/history/domain/entities/medication_record.dart';

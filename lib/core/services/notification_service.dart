@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -15,11 +17,23 @@ class NotificationService {
   final MedicationScheduleService _scheduleService = const MedicationScheduleService();
   bool _initialized = false;
 
+  /// Check if we're on a platform that supports local notifications
+  bool get _supportsNotifications {
+    return Platform.isAndroid || Platform.isIOS || Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+  }
+
   Future<void> initialize() async {
     if (_initialized) return;
 
+    // Initialize timezone
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.local);
+
+    if (!_supportsNotifications) {
+      debugPrint('Notifications not supported on this platform (web)');
+      _initialized = true;
+      return;
+    }
 
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iosSettings = DarwinInitializationSettings(
@@ -42,9 +56,10 @@ class NotificationService {
 
   /// Schedule notifications for a medication's upcoming TAKE days.
   Future<void> scheduleMedicationNotifications(Medication medication) async {
+    if (!_supportsNotifications) return;
     if (!medication.reminderEnabled || medication.reminderTime == null) return;
 
-    await _cancelMedicationNotifications(medication.id);
+    await cancelMedicationNotifications(medication.id);
 
     final upcomingDoses = _scheduleService.getUpcomingDoses(
       referenceDate: medication.referenceDate,
@@ -58,6 +73,8 @@ class NotificationService {
   }
 
   Future<void> _scheduleSingleNotification(Medication medication, AppDate date) async {
+    if (!_supportsNotifications) return;
+
     final scheduledDateTime = date.toDateTime();
     final reminderTime = medication.reminderTime!;
     final notificationDateTime = DateTime(
@@ -87,20 +104,25 @@ class NotificationService {
     );
     const details = NotificationDetails(android: androidDetails, iOS: iosDetails);
 
-    await _notifications.zonedSchedule(
-      _getNotificationId(medication.id, date),
-      'Medication Reminder',
-      "It's time to take ${medication.name}${medication.dosage != null ? ' (${medication.dosage})' : ''}.",
-      tzDateTime,
-      details,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.date,
-      payload: medication.id,
-    );
+    if (Platform.isAndroid || Platform.isIOS) {
+      await _notifications.zonedSchedule(
+        _getNotificationId(medication.id, date),
+        'Medication Reminder',
+        "It's time to take ${medication.name}${medication.dosage != null ? ' (${medication.dosage})' : ''}.",
+        tzDateTime,
+        details,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.date,
+        payload: medication.id,
+      );
+    }
   }
 
   /// Cancel all notifications for a medication.
   Future<void> cancelMedicationNotifications(String medicationId) async {
+    if (!_supportsNotifications) return;
+
     // We can't easily get all IDs, so we'll cancel by tag pattern if needed
     // For now, cancel a reasonable range
     for (int i = 0; i < AppConstants.notificationScheduleDays; i++) {
@@ -112,6 +134,8 @@ class NotificationService {
 
   /// Reschedule notifications for all medications.
   Future<void> rescheduleAllNotifications(List<Medication> medications) async {
+    if (!_supportsNotifications) return;
+
     await _notifications.cancelAll();
     for (final medication in medications) {
       if (medication.reminderEnabled) {
@@ -122,6 +146,7 @@ class NotificationService {
 
   /// Cancel all notifications.
   Future<void> cancelAllNotifications() async {
+    if (!_supportsNotifications) return;
     await _notifications.cancelAll();
   }
 
@@ -134,6 +159,8 @@ class NotificationService {
 
   /// Request notification permissions (iOS).
   Future<bool> requestPermissions() async {
+    if (!_supportsNotifications) return false;
+
     final result = await _notifications
         .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(alert: true, badge: true, sound: true);

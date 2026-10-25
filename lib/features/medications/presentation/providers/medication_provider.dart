@@ -70,7 +70,7 @@ class MedicationProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await createMedication(medication);
-    final success = result.fold(
+    final bool success = result.fold(
       (failure) => (_error = failure.message, false),
       (_) => true,
     );
@@ -91,7 +91,7 @@ class MedicationProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await updateMedication(medication);
-    final success = result.fold(
+    final bool success = result.fold(
       (failure) => (_error = failure.message, false),
       (_) => true,
     );
@@ -112,7 +112,7 @@ class MedicationProvider extends ChangeNotifier {
     notifyListeners();
 
     final result = await deleteMedication(id);
-    final success = result.fold(
+    final bool success = result.fold(
       (failure) => (_error = failure.message, false),
       (_) => true,
     );
