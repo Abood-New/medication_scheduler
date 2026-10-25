@@ -48,6 +48,4 @@ coverage/
 firebase.json
 .firebase/
 
-# Web specific (for GitHub Pages)
-web/index.html
 # Note: Keep web/ folder but ignore generated build output
