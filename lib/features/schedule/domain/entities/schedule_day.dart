@@ -78,7 +78,13 @@ class ScheduleRange extends Equatable {
   List<ScheduleDay> get takeDays => days.where((d) => d.isTake).toList();
   List<ScheduleDay> get skipDays => days.where((d) => d.isSkip).toList();
 
-  ScheduleDay? get today => days.firstWhere((d) => d.isToday, orElse: () => null);
+  ScheduleDay? get today {
+    try {
+      return days.firstWhere((d) => d.isToday);
+    } catch (_) {
+      return null;
+    }
+  }
   ScheduleDay? get nextTakeDay {
     final todayIndex = days.indexWhere((d) => d.isToday);
     if (todayIndex == -1) return null;
