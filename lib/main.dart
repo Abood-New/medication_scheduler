@@ -36,7 +36,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Hive (platform-specific)
-  if (Platform.isAndroid || Platform.isIOS || Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+  if (Platform.isAndroid ||
+      Platform.isIOS ||
+      Platform.isMacOS ||
+      Platform.isWindows ||
+      Platform.isLinux) {
     await Hive.initFlutter();
   } else {
     // Web platform
@@ -85,27 +89,32 @@ class MedicationSchedulerApp extends StatelessWidget {
         ),
         // Use cases
         Provider<GetAllMedications>(
-          create: (context) => GetAllMedications(context.read<MedicationRepository>()),
+          create: (context) =>
+              GetAllMedications(context.read<MedicationRepository>()),
         ),
         Provider<GetMedication>(
-          create: (context) => GetMedication(context.read<MedicationRepository>()),
+          create: (context) =>
+              GetMedication(context.read<MedicationRepository>()),
         ),
         Provider<CreateMedication>(
-          create: (context) => CreateMedication(context.read<MedicationRepository>()),
+          create: (context) =>
+              CreateMedication(context.read<MedicationRepository>()),
         ),
         Provider<UpdateMedication>(
-          create: (context) => UpdateMedication(context.read<MedicationRepository>()),
+          create: (context) =>
+              UpdateMedication(context.read<MedicationRepository>()),
         ),
         Provider<DeleteMedication>(
-          create: (context) => DeleteMedication(context.read<MedicationRepository>()),
+          create: (context) =>
+              DeleteMedication(context.read<MedicationRepository>()),
         ),
         Provider<GetMedicationRecords>(
           create: (context) =>
               GetMedicationRecords(context.read<MedicationRecordRepository>()),
         ),
         Provider<GetRecordsForDateRange>(
-          create: (context) =>
-              GetRecordsForDateRange(context.read<MedicationRecordRepository>()),
+          create: (context) => GetRecordsForDateRange(
+              context.read<MedicationRecordRepository>()),
         ),
         Provider<CreateOrUpdateRecord>(
           create: (context) =>
@@ -208,7 +217,8 @@ class _AppEntryPointState extends State<AppEntryPoint> {
         }
 
         // Select first medication by default
-        final selectedMed = medProvider.selectedMedication ?? medProvider.medications.first;
+        final selectedMed =
+            medProvider.selectedMedication ?? medProvider.medications.first;
         medProvider.selectMedication(selectedMed);
 
         return const MainNavigation();

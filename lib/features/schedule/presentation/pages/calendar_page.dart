@@ -78,19 +78,22 @@ class _CalendarPageState extends State<CalendarPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.calendar_month_outlined, size: 80, color: Theme.of(context).colorScheme.primary),
+          Icon(Icons.calendar_month_outlined,
+              size: 80, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 16),
-          Text('No medication selected', style: Theme.of(context).textTheme.headlineSmall),
+          Text('No medication selected',
+              style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 8),
-          Text('Add a medication to view the schedule', style: Theme.of(context).textTheme.bodyLarge),
+          Text('Add a medication to view the schedule',
+              style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     );
   }
 
   void _goToToday(ScheduleProvider scheduleProvider) {
+    final today = AppDate.today();
     setState(() {
-      final today = AppDate.today();
       _currentWeekStart = _getWeekStart(today);
       _currentMonth = AppDate(today.year, today.month, 1);
     });
@@ -98,7 +101,8 @@ class _CalendarPageState extends State<CalendarPage> {
     scheduleProvider.navigateToMonth(today);
   }
 
-  Widget _buildWeekView(BuildContext context, ScheduleProvider scheduleProvider) {
+  Widget _buildWeekView(
+      BuildContext context, ScheduleProvider scheduleProvider) {
     final weekSchedule = scheduleProvider.weekSchedule;
 
     return Column(
@@ -132,7 +136,9 @@ class _CalendarPageState extends State<CalendarPage> {
                 setState(() {
                   _currentWeekStart = _currentWeekStart.subtractDays(7);
                 });
-                context.read<ScheduleProvider>().navigateToWeek(_currentWeekStart);
+                context
+                    .read<ScheduleProvider>()
+                    .navigateToWeek(_currentWeekStart);
               },
             ),
             Column(
@@ -157,7 +163,9 @@ class _CalendarPageState extends State<CalendarPage> {
                 setState(() {
                   _currentWeekStart = _currentWeekStart.addDays(7);
                 });
-                context.read<ScheduleProvider>().navigateToWeek(_currentWeekStart);
+                context
+                    .read<ScheduleProvider>()
+                    .navigateToWeek(_currentWeekStart);
               },
             ),
           ],
@@ -201,7 +209,9 @@ class _CalendarPageState extends State<CalendarPage> {
           Text(
             day.date.formatDay(),
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: isToday ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                  color: isToday
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
                   fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
                 ),
           ),
@@ -266,9 +276,8 @@ class _CalendarPageState extends State<CalendarPage> {
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(12),
-          border: isToday
-              ? Border.all(color: colorScheme.primary, width: 2)
-              : null,
+          border:
+              isToday ? Border.all(color: colorScheme.primary, width: 2) : null,
         ),
         child: Center(
           child: Icon(
@@ -289,11 +298,17 @@ class _CalendarPageState extends State<CalendarPage> {
       runSpacing: 8,
       alignment: WrapAlignment.center,
       children: [
-        _buildLegendItem(context, Icons.check, 'Take', colorScheme.primaryContainer, colorScheme.onPrimaryContainer),
-        _buildLegendItem(context, Icons.remove, 'Skip', colorScheme.surfaceContainerHighest, colorScheme.onSurfaceVariant),
-        _buildLegendItem(context, Icons.check, 'Taken', colorScheme.primaryContainer, colorScheme.onPrimaryContainer),
-        _buildLegendItem(context, Icons.close, 'Missed', colorScheme.errorContainer, colorScheme.onErrorContainer),
-        _buildLegendItem(context, Icons.circle_outlined, 'Today', Colors.transparent, colorScheme.primary, border: true),
+        _buildLegendItem(context, Icons.check, 'Take',
+            colorScheme.primaryContainer, colorScheme.onPrimaryContainer),
+        _buildLegendItem(context, Icons.remove, 'Skip',
+            colorScheme.surfaceContainerHighest, colorScheme.onSurfaceVariant),
+        _buildLegendItem(context, Icons.check, 'Taken',
+            colorScheme.primaryContainer, colorScheme.onPrimaryContainer),
+        _buildLegendItem(context, Icons.close, 'Missed',
+            colorScheme.errorContainer, colorScheme.onErrorContainer),
+        _buildLegendItem(context, Icons.circle_outlined, 'Today',
+            Colors.transparent, colorScheme.primary,
+            border: true),
       ],
     );
   }
@@ -325,7 +340,8 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Widget _buildMonthView(BuildContext context, ScheduleProvider scheduleProvider) {
+  Widget _buildMonthView(
+      BuildContext context, ScheduleProvider scheduleProvider) {
     final monthSchedule = scheduleProvider.monthSchedule;
 
     return Column(
@@ -356,7 +372,8 @@ class _CalendarPageState extends State<CalendarPage> {
               icon: const Icon(Icons.chevron_left),
               onPressed: () {
                 setState(() {
-                  _currentMonth = AppDate(_currentMonth.year, _currentMonth.month - 1, 1);
+                  _currentMonth =
+                      AppDate(_currentMonth.year, _currentMonth.month - 1, 1);
                 });
                 context.read<ScheduleProvider>().navigateToMonth(_currentMonth);
               },
@@ -371,7 +388,8 @@ class _CalendarPageState extends State<CalendarPage> {
               icon: const Icon(Icons.chevron_right),
               onPressed: () {
                 setState(() {
-                  _currentMonth = AppDate(_currentMonth.year, _currentMonth.month + 1, 1);
+                  _currentMonth =
+                      AppDate(_currentMonth.year, _currentMonth.month + 1, 1);
                 });
                 context.read<ScheduleProvider>().navigateToMonth(_currentMonth);
               },
@@ -412,9 +430,10 @@ class _CalendarPageState extends State<CalendarPage> {
                       child: Center(
                         child: Text(
                           d,
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                color: colorScheme.onSurfaceVariant,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
                         ),
                       ),
                     ))
@@ -490,14 +509,17 @@ class _CalendarPageState extends State<CalendarPage> {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(6),
-        border: isToday ? Border.all(color: colorScheme.primary, width: 2) : null,
+        border:
+            isToday ? Border.all(color: colorScheme.primary, width: 2) : null,
       ),
       child: Center(
         child: Text(
           text,
           style: TextStyle(
             color: textColor,
-            fontWeight: isToday || isTaken || isMissed ? FontWeight.bold : FontWeight.normal,
+            fontWeight: isToday || isTaken || isMissed
+                ? FontWeight.bold
+                : FontWeight.normal,
             fontSize: 12,
           ),
         ),

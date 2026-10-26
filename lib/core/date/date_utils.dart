@@ -1,3 +1,4 @@
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 
 /// Date-only abstraction to eliminate DST/timezone issues.
@@ -44,16 +45,21 @@ class AppDate {
   bool get isToday => this == AppDate.today();
 
   bool operator ==(Object other) =>
-      other is AppDate && year == other.year && month == other.month && day == other.day;
+      other is AppDate &&
+      year == other.year &&
+      month == other.month &&
+      day == other.day;
 
   @override
   int get hashCode => Object.hash(year, month, day);
 
   /// Comparison operators for date ranges.
   bool operator <(AppDate other) => toDateTime().isBefore(other.toDateTime());
-  bool operator <=(AppDate other) => toDateTime().isBefore(other.toDateTime()) || this == other;
+  bool operator <=(AppDate other) =>
+      toDateTime().isBefore(other.toDateTime()) || this == other;
   bool operator >(AppDate other) => toDateTime().isAfter(other.toDateTime());
-  bool operator >=(AppDate other) => toDateTime().isAfter(other.toDateTime()) || this == other;
+  bool operator >=(AppDate other) =>
+      toDateTime().isAfter(other.toDateTime()) || this == other;
 
   /// Format for display.
   String format([String pattern = 'MMMM d, yyyy']) {
@@ -65,7 +71,19 @@ class AppDate {
   String formatFull() => format('EEEE, MMMM d, yyyy');
 
   @override
-  String toString() => '$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
+  String toString() =>
+      '$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
+  int compareTo(AppDate other) {
+    if (year != other.year) {
+      return year.compareTo(other.year);
+    }
+
+    if (month != other.month) {
+      return month.compareTo(other.month);
+    }
+
+    return day.compareTo(other.day);
+  }
 }
 
 /// Extension on DateTime for easy conversion.

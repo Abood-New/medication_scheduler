@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:medication_scheduler/core/date/date_utils.dart';
-import 'package:medication_scheduler/features/medications/domain/entities/medication.dart' as med_entity;
+import 'package:medication_scheduler/features/medications/domain/entities/medication.dart'
+    as med_entity;
 import 'package:medication_scheduler/features/medications/presentation/providers/medication_provider.dart';
 import 'package:medication_scheduler/features/schedule/domain/services/medication_schedule_service.dart';
 import 'package:medication_scheduler/core/constants/app_constants.dart';
-import 'package:medication_scheduler/features/settings/presentation/providers/settings_provider.dart';
+import 'package:medication_scheduler/features/settings/presentation/providers/settings_provider.dart'
+    as settings;
 import 'package:medication_scheduler/core/services/notification_service.dart';
 
 class MedicationSetupPage extends StatefulWidget {
@@ -57,7 +59,9 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_currentStep == 0 ? 'Setup Medication' : 'Step ${_currentStep + 1} of 4'),
+        title: Text(_currentStep == 0
+            ? 'Setup Medication'
+            : 'Step ${_currentStep + 1} of 4'),
         automaticallyImplyLeading: false,
       ),
       body: Form(
@@ -176,21 +180,34 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
                           Icon(
                             Icons.calendar_today,
                             size: 48,
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
                           ),
                           const SizedBox(height: 16),
                           Text(
                             _referenceDate.formatFull(),
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'Tap to change',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer
+                                      .withOpacity(0.7),
                                 ),
                           ),
                         ],
@@ -227,14 +244,21 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Center(
                               child: Text(
                                 date.formatDay(),
-                                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ),
@@ -242,15 +266,23 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
                           ),
                           title: Text(date.formatFull()),
                           trailing: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primaryContainer,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               'TAKE',
-                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
@@ -283,7 +315,8 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
                   const SizedBox(height: 16),
                   SwitchListTile(
                     title: const Text('Enable Reminders'),
-                    subtitle: const Text('Get notified on days you should take your medication'),
+                    subtitle: const Text(
+                        'Get notified on days you should take your medication'),
                     value: _reminderEnabled,
                     onChanged: (value) {
                       setState(() {
@@ -345,7 +378,8 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
     );
     if (picked != null) {
       setState(() {
-        _reminderTime = med_entity.TimeOfDay(hour: picked.hour, minute: picked.minute);
+        _reminderTime =
+            med_entity.TimeOfDay(hour: picked.hour, minute: picked.minute);
       });
     }
   }
@@ -369,12 +403,16 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
 
   Future<void> _finishSetup() async {
     final medProvider = context.read<MedicationProvider>();
-    final settingsProvider = context.read<SettingsProvider>();
+    final settingsProvider = context.read<settings.SettingsProvider>();
 
     final medication = med_entity.Medication.create(
       name: _nameController.text.trim(),
-      dosage: _dosageController.text.trim().isEmpty ? null : _dosageController.text.trim(),
-      notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+      dosage: _dosageController.text.trim().isEmpty
+          ? null
+          : _dosageController.text.trim(),
+      notes: _notesController.text.trim().isEmpty
+          ? null
+          : _notesController.text.trim(),
       scheduleType: med_entity.ScheduleType.EVERY_OTHER_DAY,
       referenceDate: _referenceDate,
       reminderEnabled: _reminderEnabled,

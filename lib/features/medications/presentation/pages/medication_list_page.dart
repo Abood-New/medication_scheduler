@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:medication_scheduler/features/medications/presentation/providers/medication_provider.dart';
-import 'package:medication_scheduler/features/medications/presentation/pages/medication_setup_page.dart';
 import 'package:medication_scheduler/features/medications/presentation/pages/medication_detail_page.dart';
 import 'package:medication_scheduler/features/medications/domain/entities/medication.dart';
 
@@ -39,7 +38,8 @@ class MedicationListPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.medication_outlined, size: 80, color: Theme.of(context).colorScheme.primary),
+            Icon(Icons.medication_outlined,
+                size: 80, color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
             Text(
               'No Medications Yet',
@@ -65,14 +65,16 @@ class MedicationListPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMedicationList(BuildContext context, MedicationProvider medProvider) {
+  Widget _buildMedicationList(
+      BuildContext context, MedicationProvider medProvider) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: medProvider.medications.length,
       itemBuilder: (context, index) {
         final medication = medProvider.medications[index];
         final isSelected = medProvider.selectedMedication?.id == medication.id;
-        return _buildMedicationCard(context, medication, isSelected, medProvider);
+        return _buildMedicationCard(
+            context, medication, isSelected, medProvider);
       },
     );
   }
@@ -100,9 +102,8 @@ class MedicationListPage extends StatelessWidget {
           width: 56,
           height: 56,
           decoration: BoxDecoration(
-            color: isSelected
-                ? colorScheme.primary
-                : colorScheme.primaryContainer,
+            color:
+                isSelected ? colorScheme.primary : colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(
@@ -146,7 +147,8 @@ class MedicationListPage extends StatelessWidget {
           ],
         ),
         trailing: PopupMenuButton<String>(
-          onSelected: (value) => _handleMenuAction(context, value, medication, medProvider),
+          onSelected: (value) =>
+              _handleMenuAction(context, value, medication, medProvider),
           itemBuilder: (context) => [
             const PopupMenuItem(value: 'select', child: Text('Select')),
             const PopupMenuItem(value: 'edit', child: Text('Edit')),
@@ -194,7 +196,8 @@ class MedicationListPage extends StatelessWidget {
     MedicationProvider medProvider,
   ) async {
     final nameController = TextEditingController(text: medication.name);
-    final dosageController = TextEditingController(text: medication.dosage ?? '');
+    final dosageController =
+        TextEditingController(text: medication.dosage ?? '');
     final notesController = TextEditingController(text: medication.notes ?? '');
 
     await showDialog(
@@ -212,12 +215,14 @@ class MedicationListPage extends StatelessWidget {
               const SizedBox(height: 16),
               TextField(
                 controller: dosageController,
-                decoration: const InputDecoration(labelText: 'Dosage (optional)'),
+                decoration:
+                    const InputDecoration(labelText: 'Dosage (optional)'),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: notesController,
-                decoration: const InputDecoration(labelText: 'Notes (optional)'),
+                decoration:
+                    const InputDecoration(labelText: 'Notes (optional)'),
                 maxLines: 2,
               ),
             ],
@@ -232,8 +237,12 @@ class MedicationListPage extends StatelessWidget {
             onPressed: () async {
               final updated = medication.copyWith(
                 name: nameController.text.trim(),
-                dosage: dosageController.text.trim().isEmpty ? null : dosageController.text.trim(),
-                notes: notesController.text.trim().isEmpty ? null : notesController.text.trim(),
+                dosage: dosageController.text.trim().isEmpty
+                    ? null
+                    : dosageController.text.trim(),
+                notes: notesController.text.trim().isEmpty
+                    ? null
+                    : notesController.text.trim(),
               );
               await medProvider.editMedication(updated);
               if (context.mounted) Navigator.pop(context);
@@ -254,14 +263,16 @@ class MedicationListPage extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Medication?'),
-        content: Text('Are you sure you want to delete "${medication.name}"? This will also delete all history records.'),
+        content: Text(
+            'Are you sure you want to delete "${medication.name}"? This will also delete all history records.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: const Text('Cancel'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
+            style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.error),
             onPressed: () => Navigator.pop(context, true),
             child: const Text('Delete'),
           ),

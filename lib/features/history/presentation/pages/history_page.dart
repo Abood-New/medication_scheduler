@@ -36,7 +36,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
         // Load records when medication changes
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (historyProvider.records.isEmpty || historyProvider.isLoading == false) {
+          if (historyProvider.records.isEmpty ||
+              historyProvider.isLoading == false) {
             historyProvider.loadRecords(medication.id);
           }
         });
@@ -72,11 +73,14 @@ class _HistoryPageState extends State<HistoryPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.history_outlined, size: 80, color: Theme.of(context).colorScheme.primary),
+          Icon(Icons.history_outlined,
+              size: 80, color: Theme.of(context).colorScheme.primary),
           const SizedBox(height: 16),
-          Text('No medication selected', style: Theme.of(context).textTheme.headlineSmall),
+          Text('No medication selected',
+              style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 8),
-          Text('Select a medication to view history', style: Theme.of(context).textTheme.bodyLarge),
+          Text('Select a medication to view history',
+              style: Theme.of(context).textTheme.bodyLarge),
         ],
       ),
     );
@@ -102,7 +106,8 @@ class _HistoryPageState extends State<HistoryPage> {
               icon: const Icon(Icons.chevron_left),
               onPressed: () {
                 setState(() {
-                  _currentMonth = AppDate(_currentMonth.year, _currentMonth.month - 1, 1);
+                  _currentMonth =
+                      AppDate(_currentMonth.year, _currentMonth.month - 1, 1);
                 });
               },
             ),
@@ -116,7 +121,8 @@ class _HistoryPageState extends State<HistoryPage> {
               icon: const Icon(Icons.chevron_right),
               onPressed: () {
                 setState(() {
-                  _currentMonth = AppDate(_currentMonth.year, _currentMonth.month + 1, 1);
+                  _currentMonth =
+                      AppDate(_currentMonth.year, _currentMonth.month + 1, 1);
                 });
               },
             ),
@@ -147,9 +153,12 @@ class _HistoryPageState extends State<HistoryPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.history_outlined, size: 64, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            Icon(Icons.history_outlined,
+                size: 64,
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
             const SizedBox(height: 16),
-            Text('No records for this month', style: Theme.of(context).textTheme.titleMedium),
+            Text('No records for this month',
+                style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(
               'Tap a date on a TAKE day to mark it as taken or missed',
@@ -171,7 +180,7 @@ class _HistoryPageState extends State<HistoryPage> {
       itemCount: monthRecords.length,
       itemBuilder: (context, index) {
         final record = monthRecords[index];
-        return _buildHistoryItem(context, record, medication);
+        return _buildHistoryItem(context, record, medication, historyProvider);
       },
     );
   }
@@ -180,6 +189,7 @@ class _HistoryPageState extends State<HistoryPage> {
     BuildContext context,
     MedicationRecord record,
     Medication medication,
+    HistoryProvider historyProvider,
   ) {
     final colorScheme = Theme.of(context).colorScheme;
     final isTake = record.isScheduledTake;
@@ -256,7 +266,8 @@ class _HistoryPageState extends State<HistoryPage> {
           ],
         ),
         onTap: isTake && !isTaken && !isMissed
-            ? () => _showActionDialog(context, record, medication, historyProvider)
+            ? () =>
+                _showActionDialog(context, record, medication, historyProvider)
             : null,
       ),
     );
@@ -295,7 +306,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     label: const Text('Taken'),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.primary,
-                      side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                      side: BorderSide(
+                          color: Theme.of(context).colorScheme.primary),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: () async {
@@ -315,7 +327,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     label: const Text('Missed'),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.error,
-                      side: BorderSide(color: Theme.of(context).colorScheme.error),
+                      side: BorderSide(
+                          color: Theme.of(context).colorScheme.error),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                     onPressed: () async {
