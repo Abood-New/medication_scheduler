@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:medication_scheduler/core/date/date_utils.dart';
 import 'package:medication_scheduler/features/medications/domain/entities/medication.dart';
 
 part 'medication_hive_model.g.dart';

@@ -218,7 +218,7 @@ class _HistoryPageState extends State<HistoryPage> {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: statusColor.withValues(alpha: 0.1),
+            color: statusColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(statusIcon, color: statusColor),
@@ -242,7 +242,7 @@ class _HistoryPageState extends State<HistoryPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: statusColor.withValues(alpha: 0.1),
+                color: statusColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:medication_scheduler/core/date/date_utils.dart';
-import 'package:medication_scheduler/features/medications/domain/entities/medication.dart';
+import 'package:medication_scheduler/features/medications/domain/entities/medication.dart' hide TimeOfDay;
+import 'package:medication_scheduler/features/medications/domain/entities/medication.dart' as med show TimeOfDay;
 import 'package:medication_scheduler/features/medications/presentation/providers/medication_provider.dart';
 import 'package:medication_scheduler/features/medications/presentation/pages/medication_setup_page.dart';
 import 'package:medication_scheduler/features/schedule/domain/services/medication_schedule_service.dart';
@@ -20,7 +21,7 @@ class MedicationDetailPage extends StatefulWidget {
 class _MedicationDetailPageState extends State<MedicationDetailPage> {
   late Medication _medication;
   bool _reminderEnabled = false;
-  TimeOfDay? _reminderTime;
+  med.TimeOfDay? _reminderTime;
 
   @override
   void initState() {
@@ -379,11 +380,11 @@ class _MedicationDetailPageState extends State<MedicationDetailPage> {
       context: context,
       initialTime: _reminderTime != null
           ? TimeOfDay(hour: _reminderTime!.hour, minute: _reminderTime!.minute)
-          : TimeOfDay(hour: 9, minute: 0),
+          : const TimeOfDay(hour: 9, minute: 0),
     );
     if (picked != null) {
       setState(() {
-        _reminderTime = TimeOfDay(hour: picked.hour, minute: picked.minute);
+        _reminderTime = med.TimeOfDay(hour: picked.hour, minute: picked.minute);
       });
       await _saveReminderSettings();
     }

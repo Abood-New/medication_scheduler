@@ -62,10 +62,7 @@ class HistoryProvider extends ChangeNotifier {
 
   /// Mark a dose as taken.
   Future<bool> markTaken(String medicationId, AppDate date, ScheduledStatus scheduledStatus) async {
-    final existing = _records.firstWhere(
-      (r) => r.date == date,
-      orElse: () => null,
-    );
+    final existing = getRecordForDate(date);
 
     final record = existing?.copyWith(
           actualStatus: ActualStatus.TAKEN,
@@ -79,7 +76,10 @@ class HistoryProvider extends ChangeNotifier {
 
     final result = await createOrUpdateRecord(record);
     final success = result.fold(
-      (failure) => (_error = failure.message, false),
+      (failure) {
+        _error = failure.message;
+        return false;
+      },
       (_) => true,
     );
 
@@ -92,10 +92,7 @@ class HistoryProvider extends ChangeNotifier {
 
   /// Mark a dose as missed.
   Future<bool> markMissed(String medicationId, AppDate date, ScheduledStatus scheduledStatus) async {
-    final existing = _records.firstWhere(
-      (r) => r.date == date,
-      orElse: () => null,
-    );
+    final existing = getRecordForDate(date);
 
     final record = existing?.copyWith(
           actualStatus: ActualStatus.MISSED,
@@ -109,7 +106,10 @@ class HistoryProvider extends ChangeNotifier {
 
     final result = await createOrUpdateRecord(record);
     final success = result.fold(
-      (failure) => (_error = failure.message, false),
+      (failure) {
+        _error = failure.message;
+        return false;
+      },
       (_) => true,
     );
 
@@ -122,17 +122,17 @@ class HistoryProvider extends ChangeNotifier {
 
   /// Clear the actual status for a date.
   Future<bool> clearStatus(String medicationId, AppDate date) async {
-    final existing = _records.firstWhere(
-      (r) => r.date == date,
-      orElse: () => null,
-    );
+    final existing = getRecordForDate(date);
 
     if (existing == null) return false;
 
     final record = existing.clearStatus();
     final result = await createOrUpdateRecord(record);
     final success = result.fold(
-      (failure) => (_error = failure.message, false),
+      (failure) {
+        _error = failure.message;
+        return false;
+      },
       (_) => true,
     );
 

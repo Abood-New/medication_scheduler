@@ -190,7 +190,7 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
                           Text(
                             'Tap to change',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
                                 ),
                           ),
                         ],
@@ -340,8 +340,8 @@ class _MedicationSetupPageState extends State<MedicationSetupPage> {
     final picked = await showTimePicker(
       context: context,
       initialTime: _reminderTime != null
-          ? med_entity.TimeOfDay(hour: _reminderTime!.hour, minute: _reminderTime!.minute)
-          : med_entity.TimeOfDay(hour: 9, minute: 0),
+          ? TimeOfDay(hour: _reminderTime!.hour, minute: _reminderTime!.minute)
+          : const TimeOfDay(hour: 9, minute: 0),
     );
     if (picked != null) {
       setState(() {

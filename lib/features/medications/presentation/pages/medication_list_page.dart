@@ -129,7 +129,7 @@ class MedicationListPage extends StatelessWidget {
                 medication.dosage!,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: isSelected
-                          ? colorScheme.onPrimaryContainer.withValues(alpha: 0.8)
+                          ? colorScheme.onPrimaryContainer.withOpacity(0.8)
                           : colorScheme.onSurfaceVariant,
                     ),
               ),
@@ -139,7 +139,7 @@ class MedicationListPage extends StatelessWidget {
               'Ref: ${medication.referenceDate.formatShort()} • Every other day',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: isSelected
-                        ? colorScheme.onPrimaryContainer.withValues(alpha: 0.7)
+                        ? colorScheme.onPrimaryContainer.withOpacity(0.7)
                         : colorScheme.onSurfaceVariant,
                   ),
             ),

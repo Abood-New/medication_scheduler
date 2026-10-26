@@ -61,10 +61,13 @@ class ScheduleProvider extends ChangeNotifier {
       );
     }
 
-    final record = _historyRecords.firstWhere(
-      (r) => r.date == date,
-      orElse: () => null,
-    );
+    MedicationRecord? record;
+    for (final r in _historyRecords) {
+      if (r.date == date) {
+        record = r;
+        break;
+      }
+    }
 
     return ScheduleDay.fromReference(
       date: date,

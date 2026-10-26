@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:medication_scheduler/features/settings/presentation/providers/settings_provider.dart';
+import 'package:medication_scheduler/features/settings/presentation/providers/settings_provider.dart' hide TimeOfDay;
+import 'package:medication_scheduler/features/settings/presentation/providers/settings_provider.dart' as settings_entity show TimeOfDay;
 import 'package:medication_scheduler/core/services/notification_service.dart';
 import 'package:medication_scheduler/core/constants/app_constants.dart';
 
@@ -211,7 +212,7 @@ class SettingsPage extends StatelessWidget {
   Future<void> _showTimePicker(BuildContext context, SettingsProvider settings) async {
     final initialTime = settings.defaultReminderTime != null
         ? TimeOfDay(hour: settings.defaultReminderTime!.hour, minute: settings.defaultReminderTime!.minute)
-        : TimeOfDay(hour: 9, minute: 0);
+        : const TimeOfDay(hour: 9, minute: 0);
 
     final picked = await showTimePicker(
       context: context,
@@ -219,7 +220,7 @@ class SettingsPage extends StatelessWidget {
     );
 
     if (picked != null) {
-      final time = TimeOfDay(hour: picked.hour, minute: picked.minute);
+      final time = settings_entity.TimeOfDay(hour: picked.hour, minute: picked.minute);
       await settings.setDefaultReminderTime(time);
     }
   }
